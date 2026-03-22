@@ -1,0 +1,1 @@
+policy-profilesは、判定（accept/reject）側のプロファイル雛形を収録する。ここで扱うのは採用Evidenceや閾値などの「方針」であり、delta生成や比較成立条件とは分離される。運用の違いはprofile差として表現し、v0.1の比較禁止を破らない。

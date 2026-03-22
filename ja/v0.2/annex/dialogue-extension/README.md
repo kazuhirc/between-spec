@@ -1,0 +1,1 @@
+dialogue-extensionは、対話をSidecarとして保持し、参照束縛と前提合意を補助する拡張点を定義する。v0.1のoperation_kind（read/derive/compare/write）と混線させず、対話は追加のoperation_kindとして外側に置く。最終的にはv0.1のselect/checkへ戻り、同一space/basis/$Φ$の拘束を守って比較へ進む。
