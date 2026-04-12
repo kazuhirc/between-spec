@@ -36,6 +36,16 @@ role: index
 - notes: OS 比喩の射程はこの文書でだけ扱う。他文書では比喩を増やさない
 - location: `between-core/ja/annex/kernel-memo.md`
 
+### kernel-memo-companion
+
+- role: なぜ kernel が先に要るのかを、型、検図、AI review の観察から補う
+- reader: kernel-memo を読む前後で OS 比喩や kernel stance の必要性を確認したい読者
+- contains: 型と安定面、出力増加と比較不能、検図と review の共通構造、 kernel necessity の観察的導入
+- depends on: なし
+- read next: kernel-memo, minimal-syscall-set
+- notes: 新しい規範や操作を追加する文書ではない。kernel-memo を誤読しないための companion として置く
+- location: `between-core/ja/annex/kernel-memo-companion.md`
+
 ## Layer 2 — mapping and interface
 
 ### operation
@@ -98,6 +108,7 @@ role: index
 
 ```mermaid
 flowchart TB
+  D0[kernel-memo-companion]
   D1[kernel-memo]
   D2[operation]
   D3[minimal-syscall-set]
@@ -106,6 +117,8 @@ flowchart TB
   D6[gate-completion-law]
   D7[end-to-end-sequence]
 
+  D0 --> D1
+  D0 --> D3
   D1 --> D2
   D1 --> D3
   D2 --> D3
@@ -121,10 +134,10 @@ flowchart TB
 ## 推奨する閲覧順
 
 公開向け:
-kernel-memo → minimal-syscall-set → end-to-end-sequence → 必要に応じて syscall-table → gate-completion-table
+kernel-memo-companion → kernel-memo → minimal-syscall-set → end-to-end-sequence → 必要に応じて syscall-table → gate-completion-table
 
 内部設計向け:
-kernel-memo → operation → minimal-syscall-set → syscall-table → gate-completion-table → gate-completion-law → end-to-end-sequence
+kernel-memo-companion → kernel-memo → operation → minimal-syscall-set → syscall-table → gate-completion-table → gate-completion-law → end-to-end-sequence
 
 ## JP-EN mini glossary
 

@@ -1,4 +1,6 @@
-# BSL Shell v0.1.39（実装非依存の操作語彙）
+# BSL Shell（実装非依存の操作語彙）
+
+ **Version: v0.1.40**
 
 ## Changelog
 
@@ -41,6 +43,7 @@
 - v0.1.37: recoverableの意味論的定義を型エラー一覧冒頭に追加（「必ず回復できる」誤読を防止）
 - v0.1.38: Gateとcheckの規律をスコープ冒頭に要約（Ruleは規範、NOTEは補助説明）
 - v0.1.39: スコープ冒頭にGate/Evidence公理の要約を追加。秘匿禁止Rule→境界NOTE（情報分類は外部仕様レイヤの責務）に置換。gate Ruleにcheck_result種別を明示
+- v0.1.40: undefined_type 写像節と 2段返し節に explanatory note を追加。U1–U4 を domain / basis / contract / replay failure の代表例として読む補助線を与え、停止点規則と diagnostic_reason の役割分離は維持
 
 ---
 
@@ -355,6 +358,10 @@ Shell の失敗は BSL_9 Checks の undefined_type（U1〜U4）に接続でき�
 - NOTE: undefined_type の停止点確定規則と diagnostic_reason の確定については、本節末尾の「失敗の返し方（2段返し）」を参照。
 - NOTE: U3/U4の割当ては意味論ではなく、停止点確定規則（U1→U2→U3→U4）の評価順で「最初に不成立となった側」を返す（diagnostic_reasonの確定は5.3）。
 - NOTE: 以下は、各 undefined_type が典型的に対応しうる失敗モードの例である（非網羅）。実際の undefined_type は停止点確定規則で確定し、意味論的分類ではない。
+- NOTE: U1 は domain 未成立の代表例として読める。比較単位または参照束がまだ成立しておらず、Shell では cross_space がその典型である。
+- NOTE: U2 は basis failure の代表例として読める。現在の読みの footing が comparability を保てない。
+- NOTE: U3 は contract failure を含む代表例として読める。frame、effect、governance の条件が未閉包であり、admissible な reading または update を支えられない。
+- NOTE: U4 は replay failure の代表例として読める。evidence chain が reconstructability を保てない。
 
 | undefined_type | 典型的な失敗モード例（diagnostic_reason 側で詳細化） |
 |---|---|
@@ -382,6 +389,7 @@ Shell は「どこで止めるか」を固定するため、失敗を常に次�
 NOTE: `undefined_type` は「比較が前に進まない理由（停止点）」を表す。`diagnostic_reason` は「最小修正の方向（何を確定し直すか）」を表す。停止は守りではなく観測設計である。
 NOTE: `diagnostic_reason` は v0.1 では文字列でもよい。将来の集計を想定する場合、kind(Missing|Mismatch|Violation|Other) / code(型エラー名) / details(参照ID等) の2〜3層に分けてもよい（非規範）。
 NOTE: 停止点は `undefined_type` として U1→U2→U3→U4 の優先で確定する。原因は `diagnostic_reason` として 5.3「失敗優先順位」（Missing優先など）で確定する。両者は役割が異なる。
+NOTE: U1〜U4 は error 名ではなく、現在の Contract または admissibility conditions がどこで閉じなくなったかを読むための停止点としても扱える。したがって、停止は失敗後の受動的中断ではなく、比較可能性または安全継続性が崩れた位置を reason 付きで返す観測設計である。
 NOTE: 推奨語彙（機械判定可能な失敗モード）: `call_without_effect` / `approval_missing` / `basis_not_closed` / `ssot_pollution_attempt` / `mapping_mismatch` / `amplification_loop` / `noisy_neighbor` / `backfill_overrun`。
 NOTE: 推奨語彙（欠落）: `diff_ref_missing` / `basis_ref_missing`（採用判断を伴うcommitの根拠参照束が欠落）
 NOTE: `amplification_loop` は「遅延→timeout→retry により負荷が自己増幅している」崩壊モードを指す。v0.1では語彙のみ規範化し、遮断・レート制限・優先度分離などの回復手順は v0.2 modules/playbooks に委譲する。

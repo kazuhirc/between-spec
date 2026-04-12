@@ -7,11 +7,11 @@
 
 ---
 
-## B.1 Slot Type Catalog
+## A.1 Slot Type Catalog
 
 Slot.type に使用する標準的なBSL概念名の一覧を示す。
 
-### B.1.1 三軸（Flow / Behavior / Evidence）
+### A.1.1 三軸（Flow / Behavior / Evidence）
 
 | type | 対応するBSL概念 | BSL章 | 説明 |
 |------|-----------------|-------|------|
@@ -27,7 +27,7 @@ Slot.type に使用する標準的なBSL概念名の一覧を示す。
 | Evidence.ActionTrace | Reading | BSL_4 | 行為の記録（派生Reading）。成功・反映・権限OKを含意しない |
 | Evidence.ApprovalRef | Reading | BSL_4 | 承認根拠として提示された参照（approval_id等）。成立判定はContext側 |
 
-### B.1.2 外側レイヤ（Variant / Design History）
+### A.1.2 外側レイヤ（Variant / Design History）
 
 | type | 対応するBSL概念 | BSL章 | 説明 |
 |------|-----------------|-------|------|
@@ -40,7 +40,7 @@ Slot.type に使用する標準的なBSL概念名の一覧を示す。
 | DesignHistory.Because | Because | BSL_6 | 判断の根拠 |
 | DesignHistory.Therefore | Therefore | BSL_6 | 採択内容 |
 
-### B.1.3 実行・連続性（Operation / Continuity）
+### A.1.3 実行・連続性（Operation / Continuity）
 
 | type | 対応するBSL概念 | BSL章 | 説明 |
 |------|-----------------|-------|------|
@@ -53,7 +53,7 @@ Slot.type に使用する標準的なBSL概念名の一覧を示す。
 | Continuity.RestorePoint | RestorePoint | BSL_8 | 復元点 |
 | Continuity.Checkpoint | Checkpoint | BSL_8 | チェックポイント |
 
-### B.1.4 拡張ルール
+### A.1.4 拡張ルール
 
 実装層が独自のtypeを追加する場合、以下のルールに従う。
 
@@ -67,7 +67,7 @@ Slot.type に使用する標準的なBSL概念名の一覧を示す。
 
 ---
 
-## B.2 Layer Schema（参考例）
+## A.2 Layer Schema（参考例）
 
 BSL_9 の補足として示す Layer の JSON Schema 例。
 
@@ -108,7 +108,7 @@ BSL_9 の補足として示す Layer の JSON Schema 例。
 }
 ```
 
-### B.2.1 Constraints
+### A.2.1 Constraints
 
 | ID | 制約 | 根拠 |
 |----|------|------|
@@ -116,7 +116,7 @@ BSL_9 の補足として示す Layer の JSON Schema 例。
 | LY-C2 | depends_on は自身より下位のレイヤのみ | 依存方向 |
 | LY-C3 | name は os / implementation / application のいずれか | 三層モデル |
 
-### B.2.2 標準Layer定義
+### A.2.2 標準Layer定義
 
 ```json
 [
@@ -148,11 +148,11 @@ LY002, LY003 の components は実装ごとに自由に定義する。
 
 ---
 
-## B.3 Slot Examples（補足例）
+## A.3 Slot Examples（補足例）
 
 BSL_9 本文の例（Flow.Part）以外のSlot例を示す。
 
-### B.3.1 Evidence.Reading
+### A.3.1 Evidence.Reading
 
 ```json
 {
@@ -173,7 +173,7 @@ BSL_9 本文の例（Flow.Part）以外のSlot例を示す。
 }
 ```
 
-### B.3.2 Behavior.Step
+### A.3.2 Behavior.Step
 
 ```json
 {
@@ -192,7 +192,7 @@ BSL_9 本文の例（Flow.Part）以外のSlot例を示す。
 }
 ```
 
-### B.3.3 DesignHistory
+### A.3.3 DesignHistory
 
 ```json
 {
@@ -219,3 +219,4 @@ BSL_9 本文の例（Flow.Part）以外のSlot例を示す。
 | バージョン | 日付 | 変更内容 |
 |-----------|------|----------|
 | v0.1 | — | 初版 |
+| v0.1.1 | 2026-03 | 内部節番号を B.* → A.* に修正（Annex B との衝突解消） |

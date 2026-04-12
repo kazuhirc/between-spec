@@ -1,6 +1,6 @@
 # BSL_1. Core Concepts（基本概念）
 
-**Version: v0.3.7**
+**Version: v0.3.8**
 
 ---
 
@@ -165,6 +165,8 @@ BSL の責務：
 - 基準が変化する場合、Variant または Design History を経由する
 - Basis の破壊的更新は禁止（append-only もしくは置換の明示手続）
 
+Basis は単なる参照系ではなく、どの差異を背景化しても comparability が保たれるかを含む読み取り基準である。
+
 ---
 
 ## 4. 外側レイヤ：Context / Variant / Design History
@@ -215,15 +217,21 @@ OperationScope は Context 配下に属し、Design History や Operation から
 
 ## 5. Meaning Identity（意味的同一性）
 
-Core 第7章に基づき、BSL では意味的同一性（Identity）を次の3条件で定義する。
+Core 第7章、Core 1.5、および Appendix A.4 に基づき、BSL では意味的同一性（Identity）を、どの構造が、どの基準のもとで一致していれば「同じ」と見なせるかという成立条件として扱う。
+
+Meaning Identity は、次の三つの要素から構成される。
 
 | 条件 | 説明 | Core参照 |
 |------|------|----------|
-| Structure同一性 | Element / Structure の集合と接続関係が一致していること（Flow なら Part/Assembly 構成、Behavior なら Event/Step 構成など） | A.4.1 |
-| Basis同一性 | Basis（Placement / Sequence / Ordering）が同じ意味基準（座標系・順序・並び）を共有していること | A.2.2, A.4.1 |
-| View一致 | Structure × Sidecar を View で読み取った結果として得られる意味が同一であること（表示やフォーマットの差異は許容） | A.4.2 |
+| Structural Identity | Flow／Behavior／Evidence の Structure が、ある View のもとで一致していること。Flow なら Part／Assembly 構成、Behavior なら Event／Step 構成、Evidence なら Reading を意味づける Condition 構造が一致していることを含む | Core 1.5, A.4.1 |
+| Basis Consistency | その一致が、同じ Basis（Placement / Sequence / Ordering）のもとで評価されていること。座標系、手順基準、記録順序の不一致は Identity の破綻として扱う | Core 1.5, A.2.2, A.2.3, A.4.1 |
+| Variation Policy | 宣言された揺れの範囲内で、差異が同一性を壊さないこと | Core 1.5, A.4.2 |
 
-BSL の責務は、これら3条件を **形式仕様として再現できるフォーマット・制約** を定めることである。
+したがって、「同じとは何か」は本体構造だけでは決まらない。本体構造の一致に加えて、どの Basis のもとで読み、どの揺れを許容するかが外在的に定義されてはじめて、Meaning Identity は成立する。
+
+View は Identity の独立した第四条件ではなく、どの構造をどの条件で評価するかを定める読み取り写像である。Sidecar は、その評価に必要な Basis、Condition、Ordering を保持し、Variation Policy はその読み取り条件の上に外在的に宣言される。比較は、常に SSOT と Sidecar に遡って成立条件を確認したうえで、同じ View のもとで行わなければならない。
+
+BSL の責務は、これら三条件を形式仕様として再現できるデータ構造、参照規則、制約として固定することである。すなわち、Structure の比較可能性、Basis の整合性、Variation Policy の機械可読な宣言を、実装が破壊せずに扱えるよう仕様化する。
 
 ---
 
@@ -437,12 +445,15 @@ Flow (A001) ← Behavior (Q001) ← Evidence (R001)
 | 三層 | Element / Structure / Basis |
 | Basis の役割 | 座標系上の基準。実データは Sidecar に外在化され、意味的 SSOT を成立させる基準となる。SSOT 本体そのものではない |
 | 外側レイヤ | Context（OperationScope を含む）/ Variant / Design History |
-| Meaning Identity | Structure同一性 / Basis同一性 / View一致 の3条件 |
+| Meaning Identity | Structural Identity / Basis Consistency / Variation Policy の3条件。View は評価視点を定める読み取り写像であり、独立した条件ではない |
 | 依存ポリシー | Evidence → Behavior → Flow（一方向）、外側レイヤ → 三軸（一方向） |
 | Space | 同一性を評価するための前提が閉じている単位（space_id で識別） |
 | Mapping | Space 間接続（mapping_id / mapping_kind で宣言） |
 | 基本原則 | BP-1〜BP-9 |
 | Running Example | 全章共通の「対象A」を定義 |
+| Comparability | 同一 space_id かつ同一 basis_id の内側で、同じ対象を同じ条件で読めること |
+| Stoppability | 条件が閉じないときに、reason 付きで hold / blocked / non-comparable を返せること |
+| Resumability | trace_id、basis、handoff、continuity により、別主体が同じ前提から安全に再開できること |
 
 本章が整うことで、BSL 全体が「Between Core の意味座標系を破壊しない仕様レイヤ」として機能することを保証する。
 
@@ -462,3 +473,4 @@ Flow (A001) ← Behavior (Q001) ← Evidence (R001)
 | v0.3.5 | 2026-03 | 公開前整合パッチ：§2.1–2.3 Basis 説明列を「SSOT を成立させる基準層」に統一（appendix A.2.3 との整合） |
 | v0.3.6 | 2026-03 | 公開前整合パッチ：§6.1 Evidence→Flow を Core A.3.1 に一致（○）。§6.3 簡略表現との関係を注記 |
 | v0.3.7 | 2026-03 | §10.4 の Ordering 例を BSL_4 スキーマ語彙に整合（sequence → sequence_number / previous_ordering_id） |
+| v0.3.8 | 2026-04 | Core 1.5 整合パッチ：§5 Meaning Identity を Structural Identity / Basis Consistency / Variation Policy の三条件に整理し、View を独立条件ではなく読み取り写像として明確化。Summary の Meaning Identity 行も同内容に整合 |

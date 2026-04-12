@@ -430,7 +430,9 @@ Sidecar の append-only 原則（Core A.5.2）に従い、以下を遵守する�
 
 ### 7.1 Sequence-level check での使用
 
-BSL_4_Evidence 6.6.1 および BSL_7_Operation 7.5 との連携例。
+BSL_4 Evidence §6.6.1 の Evidence 表現と、BSL_7 Operation §5（Operation Tenets）の運用原則とを接続する例。
+
+注記: これは check 結果を Evidence として記録する例であり、採用や実行許可そのものを含意しない。
 
 ```json
 {

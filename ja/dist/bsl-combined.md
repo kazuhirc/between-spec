@@ -12,26 +12,42 @@
 - derived artifact: `ja/dist/bsl-combined.md`
 - filename policy: versionless lowercase hyphen
 
+## Annex / Shell について
+
+本結合版は BSL 本文（第0章〜第9章および Glossary）のみを収録する。
+
+BSL Annex は BSL_0 で定義される Informative 文書であり、本結合版には含まれない。
+また、BSL Shell v0.1 は BSL 本文とは別の独立仕様であるため、本結合版には含まれない。
+
+以下の補助文書は個別に参照されたい。
+
+- BSL Annex A（Architecture 補足）: `ja/v0.1/annex/BSL_Annex_A_Architecture.md`
+- BSL Annex B（Variation Policy Schema）: `ja/v0.1/annex/BSL_Annex_B_Variation_Policy_Schema.md`
+- BSL Annex C（Curry–Howard Correspondence）: `ja/v0.1/annex/BSL_Annex_C_Curry_Howard_Correspondence.md`
+- BSL Shell v0.1: `ja/v0.1/bsl-shell.md`
+
 ---
 
-# **0. 位置づけと目的（v0.2.4）**
+# 0. 位置づけと目的
 
-## **0.1 本書の役割：Between と実装の"あいだ"を定義する**
+**Version: v0.2.6**
+
+## 0.1 本書の役割：Between と実装の"あいだ"を定義する
 
 Between は、ものづくりにおける
 **空間（Flow）／時間（Behavior）／観測（Evidence）** を統一的に扱うための
 「意味の座標系」を与える思想体系である。
 
-一方、実装としての 2.5D Architecture は、
+一方、実装層は、
 この座標系を用いて **具体的な自動化・配置・帳票・比較・View 操作**を行うための
-参照実装である。
+任意実装である。
 
 本書は、その両者の"あいだ"に置かれる。
 すなわち：
 
 - **Between（思想）** … なぜその構造が必要か
 - **BSL（仕様）** … 何を最小限として固定するか
-- **2.5D（実装）** … どのように実装するか
+- **Implementation（実装）** … どのように実装するか
 
 の三層構造において、
 **BSL は「思想を損なわず、実装を縛らない」ための中位レイヤ**として
@@ -47,35 +63,38 @@ Flow / Behavior / Evidence と三層構造（Element / Structure / Basis）と�
 
 ### Normative vs Informative（規範と参考の区分）
 
-本リポジトリにおける文書の規範性は以下の通り定義される。
+本リポジトリおよび関連リポジトリにおける文書の規範性は以下の通り定義される。
 
 | 区分 | 場所 | 性質 |
 |------|------|------|
 | Core Appendix | Between Core | Normative（規範） |
 | BSL 本文（Chapter 0-9） | BSL | Normative（規範） |
 | BSL Annex | BSL | Informative（参考・非規範） |
-| Sandboxes | tools/ | Informative（参考・非規範） |
+| between-docs | sandbox 配下 | Informative（参考・非規範） |
+| between-labs | 将来の実装・実験置き場 | Informative（参考・非規範） |
 
 BSL Annex は例・テンプレート・補足説明を提供するが、規範的主張の根拠としては使用しない。
 規範定義は Between Core Appendix を参照すること。
 
 ---
 
-## **0.2 本書が定義する範囲と定義しない範囲**
+## 0.2 本書が定義する範囲と定義しない範囲
 
 本書（BSL: Between Specification Layer）は、Between Core が与える
 **意味構造（Flow / Behavior / Evidence と三層構造）** を、
 実装が参照可能な **形式仕様（Structure / 梱包単位 / 依存方向 / 記録原則）** に
-落とし込むための「意味OS層」である。
+落とし込むための中間仕様層である。
+BSL は、意味の成立条件を固定し、実装の表現を拘束しないという点で、
+いわば「意味のOS層」に相当する。
 
 BSL が扱うのは、意味の成立に必要な **最小限の構造だけ** であり、
 具体的な計算方法・自動化アルゴリズム・UI などには立ち入らない。
 
-### **0.2.1 本書が定義する範囲（BSL の責務）**
+### 0.2.1 本書が定義する範囲（BSL の責務）
 
 BSL の責務は、以下の「揺れてはならない最小骨格」を固定することである。
 
-#### **(1) 三軸（Flow / Behavior / Evidence）と三層（Element / Structure / Basis）の形式仕様**
+#### (1) 三軸（Flow / Behavior / Evidence）と三層（Element / Structure / Basis）の形式仕様
 
 Between Core で定義された概念をそのまま形式化し、
 **境界・整合性・依存方向** を固定する。
@@ -84,12 +103,12 @@ Between Core で定義された概念をそのまま形式化し、
 **意味的 SSOT を成立させる基準** として扱う。
 
 | 軸 | Element | Structure | Basis（読み取り基準） |
-|----|---------|-----------|------------------|
+|----|---------|-----------|----------------------|
 | Flow | Part | Assembly | Placement |
 | Behavior | Event | Step | Sequence |
 | Evidence | Reading | Condition | Ordering |
 
-#### **(2) 外側レイヤ（Variant / Design History / Context）の参照構造**
+#### (2) 外側レイヤ（Variant / Design History / Context）の参照構造
 
 三軸に対して **一方向参照** を定義し、
 判断構造が Flow / Behavior / Evidence を上書きしないよう保証する。
@@ -97,7 +116,7 @@ Between Core で定義された概念をそのまま形式化し、
 意味的同一性（Meaning Identity）と Variation（揺れ）に関する
 **判断前提の形式表現** を提供する。
 
-#### **(3) Evidence Chain（append-only）と Operation / Continuity の記録構造**
+#### (3) Evidence Chain（append-only）と Operation / Continuity の記録構造
 
 - Evidence を非破壊的に積み重ねる **append-only の Sidecar 原則**
 - Operation による実行ログ
@@ -106,7 +125,7 @@ Between Core で定義された概念をそのまま形式化し、
 を **最小の記録構造** として定義する。
 Evidence chain は Sidecar に append-only で蓄積される読み取り履歴であり、View による Meaning Identity の再構成を可能にする。
 
-#### **(4) 依存ポリシー**
+#### (4) 依存ポリシー
 
 - Evidence → Behavior → Flow の一方向依存
 - Element → Structure → Basis の層内一方向依存
@@ -121,7 +140,7 @@ Evidence chain は Sidecar に append-only で蓄積される読み取り履歴�
 禁止：三軸 → 外側レイヤ
 ```
 
-#### **(5) BSL（OS層）と Sandboxes（実装層）との境界条件**
+#### (5) BSL（OS層）と実装層との境界条件
 
 BSL は **意味の座標系だけ** を提供し、
 データ形式や操作手続きは実装層に委ねる。
@@ -131,41 +150,40 @@ Slot / Layer / Boundary を通じた
 
 ---
 
-### **0.2.2 本書が定義しない範囲（実装に委ねる部分）**
+### 0.2.2 本書が定義しない範囲（実装に委ねる部分）
 
 BSL は具体的な実装方式を規定しない。
-以下はすべて **範囲外** とし、Sandboxes や Annex で扱う。
+以下はすべて **範囲外** とし、非規範の実装例・検討例として、現時点では between-docs の sandbox で扱う。
 
-#### **(1) データ形式・ファイル形式**
+#### (1) 物理形式・データ形式
 
-- Excel / CSV / SQL / Parquet
-- AutoCAD DWG / SVG / JSON5 などすべて自由
+- YAML / JSON / CSV / DXF / DWG / SQLite などの保存形式
+- 実ファイルの分割単位や命名規則
 
-#### **(2) 実装技術**
+#### (2) API / 関数 / 実装言語
 
-- Python / VBA / TypeScript / .NET
-- CAD API / メッセージング基盤 / クラウドサービス
+- Python / VBA / AutoLISP / VB.NET / JavaScript などの実装言語
+- 関数名、クラス名、API 形状、I/O インターフェース
 
-#### **(3) UI / ツール / OSS / 自動化アルゴリズム**
+#### (3) UI / ツール / OSS / 自動化アルゴリズム
 
-- DoubletViewer, CompareAdvanced, Binder
 - 自動作図、自動検図、レイアウト生成
-- 差分検出・クラスタリング・機械学習
+- 差分検出、クラスタリング、機械学習
 
-#### **(4) 2.5D Architecture の具象化**
+#### (4) 特定アーキテクチャの具象化
 
-- AutoCAD と Excel を結ぶ具体的な最小アーキテクチャ
-- InsertList / ZLEVEL / ZoomPattern などの運用仕様
+- 実装技術やツール群を組み合わせた具体アーキテクチャ
+- 個別運用に依存する配置ルール、入出力仕様、操作仕様
 
-これらは **Annex（参照実装ガイド）** に退避する。
+これらは非規範の実装例・検討例として、現時点では between-docs の sandbox に退避する。
 
-#### **(5) 公開・配布・ライセンス運用**
+#### (5) 公開・配布・ライセンス運用
 
 BSL は意味構造の仕様であり、公開形態は別文書で扱う。
 
 ---
 
-### **0.2.3 BSL の基本方針**
+### 0.2.3 BSL の基本方針
 
 BSL は次の原則に基づいて設計される。
 
@@ -181,9 +199,14 @@ BSL は次の原則に基づいて設計される。
 
 再計算・再読込・再開が可能な設計を保証する。
 
+この分離は、作業を遅くするための儀礼ではない。  
+観測、判断、更新が混同されると、何が見られ、どの基準で読まれ、何が変更されたかを後から共有できなくなるためである。
+BSL は、observation を Evidence と Sidecar に残し、judgment を Structure の外で確定し、update を実行段に分離する。  
+それにより、比較可能性、停止可能性、再開可能性を、個人の記憶ではなく共有可能な構造として保つ。
+
 ---
 
-## **0.3 公開・配布・ライセンスの境界**
+## 0.3 公開・配布・ライセンスの境界
 
 本書は、Between の技術仕様（意味構造と境界条件）の規範を定義する。
 公開・配布・ライセンス等の運用方針は本書の範囲外とし、別文書で扱う。
@@ -193,13 +216,13 @@ BSL 本文が扱うのは、意味の成立に必要な最小限の骨格だけ�
 
 ---
 
-## **0.4 想定読者**
+## 0.4 想定読者
 
 本書の読者として想定しているのは、次の層である。
 
 ### （1）実装担当者（OSS開発者・社内開発者）
 
-- 2.5D Architecture を書く際の起点が欲しい
+- BSL に準拠した実装を書く際の起点が欲しい
 - Between の思想を損なわずに実装したい
 - Flow・Behavior・Evidence の境界条件が知りたい
 
@@ -215,14 +238,14 @@ BSL 本文が扱うのは、意味の成立に必要な最小限の骨格だけ�
 
 ---
 
-## **0.5 本書の構成**
+## 0.5 本書の構成
 
 本書は、Between Core の意味構造を BSL として形式化し、
-Sandboxes（実装層）が安全に利用できるように整えたものである。
+実装層が安全に利用できるように整えたものである。
 
 以下に各章の役割と読み順をまとめる。
 
-### **第1章 Core Concepts（総論）**
+### 第1章 Core Concepts（総論）
 
 三軸（三層）・外側レイヤ・Operation・Continuity の
 **全体像・語彙・Core との対応関係** を示す。
@@ -230,9 +253,9 @@ Sandboxes（実装層）が安全に利用できるように整えたもので�
 - BSL 全域の前提
 - 三軸 × 三層の座標系
 - Meaning Identity / Variation の定義
-- Running Example（第10章）：BSL_2〜BSL_8 の共通例を定義
+- Running Example（第10章）：BSL\_2〜BSL\_8 の共通例を定義
 
-### **第2〜4章 Flow / Behavior / Evidence（三軸仕様）**
+### 第2〜4章 Flow / Behavior / Evidence（三軸仕様）
 
 Core の定義に基づき、各軸を
 
@@ -250,7 +273,7 @@ Core の定義に基づき、各軸を
 | 3章 | Behavior | Event | Step | Sequence |
 | 4章 | Evidence | Reading | Condition | Ordering |
 
-### **第5章 Variant（外側レイヤ：選択肢構造）**
+### 第5章 Variant（外側レイヤ：選択肢構造）
 
 - Variant Type（構造選択）
 - Variation（揺れ）
@@ -258,7 +281,7 @@ Core の定義に基づき、各軸を
 
 など、**判断側の選択肢構造** を形式化する。
 
-### **第6章 Design History（外側レイヤ：判断理由）**
+### 第6章 Design History（外側レイヤ：判断理由）
 
 - Why / Because / Therefore の三分割
 - Core の「判断レイヤ」の形式化
@@ -267,7 +290,7 @@ Core の定義に基づき、各軸を
 判断過程を append-only で保存し、
 将来の比較・検証が可能な履歴構造を与える。
 
-### **第7章 Operation（実行モデル）**
+### 第7章 Operation（実行モデル）
 
 - 実行単位（OperationSession）
 - 実行記録（OperationRecord）
@@ -276,7 +299,7 @@ Core の定義に基づき、各軸を
 「何が、いつ、どう実行されたか」を
 **非破壊で積み重ねる最小構造** を定義する。
 
-### **第8章 Continuity（継続性・再開点）**
+### 第8章 Continuity（継続性・再開点）
 
 - Snapshot
 - Anchor
@@ -286,11 +309,11 @@ Core の定義に基づき、各軸を
 プロジェクト・設計・実験などの業務を
 **途中で止めても再開できる情報構造** を規定する。
 
-### **第9章 Architecture（OS層の境界条件）**
+### 第9章 Architecture（OS層の境界条件）
 
 - OS層（BSL）
-- Implementation層（2.5D / CAD / DB 等）
-- Application層（DoubletViewer等）
+- Implementation層（任意実装）
+- Application層（実装上に乗る利用層）
 
 三層モデルとして明確に分離し、
 **意味OS ⇄ 実装 ⇄ アプリケーション** の境界条件と依存方向を定義する。
@@ -298,21 +321,20 @@ Core の定義に基づき、各軸を
 Slot / Layer / Boundary を用いて、実装層と BSL を安全に接続する。
 
 補足：
-BSL_2〜BSL_8 の例示は、BSL_1 第10章「Running Example」で定義された共通例を前提とする。
+BSL\_2〜BSL\_8 の例示は、BSL\_1 第10章「Running Example」で定義された共通例を前提とする。
 本構成表では章番号を再配番せず、参照先のみを明示する。
 
-### **Annex：参照実装ガイド（2.5D Architecture等）**
+### Annex：informative 補助文書群
 
-本文の意味構造を保持したまま、
-実装層でのマッピング例・API案・Slot Type Catalog を示す。
+Annex は、本文の規範定義を補助するための非規範文書群である。
 
-- 2.5D Architecture との対応
-- DPM（決定論的配置）の実装指針
-- View 操作の実装例
+- Annex A は、Architecture の補足として Slot Type Catalog や Layer Schema 例を示す
+- Annex B は、Variation Policy の機械可読 schema を示す
+- Annex C は、Contract と admissibility judgment の読解補助を与える
 
 ---
 
-## **0.6 本書の狙い**
+## 0.6 本書の狙い
 
 言い換えるなら、本書の役割は次の一言に尽きる。
 
@@ -322,7 +344,7 @@ BSL_2〜BSL_8 の例示は、BSL_1 第10章「Running Example」で定義され�
 
 - OSSコミュニティは安心して派生実装を作れる
 - 実装者はベンダー依存せずに構造化できる
-- 2.5D Architecture は抽象的な基盤を得る
+- 任意の実装が抽象的な基盤を得る
 
 本書は、そのための **"揺れない基準"** を提供する。
 
@@ -370,18 +392,20 @@ BSL は Core が定義した境界条件（9章）を継承し、
 
 | バージョン | 日付 | 変更内容 |
 |-----------|------|----------|
-| v0.1    | 2025-11 | 初版 |
-| v0.2    | 2025-12 | Core整合強化：0.2を責務・基本方針で再構成、0.5を現行BSL章構成と整合、Core参照セクション追加 |
-| v0.2.1  | 2026-01 | Appendix → Annex 命名変更。Normative vs Informative 宣言を追加   |
-| v0.2.2  | 2026-03 | 公開前整合パッチ：Basis を「SSOT を成立させる基準」に統一。表ヘッダ・0.5 節の文言を整合 |
-| v0.2.3 | 2026-03 | 公開前整合パッチ：§0.5 に Running Example（BSL_1 第10章）への参照を補足 |
+| v0.1 | 2025-11 | 初版 |
+| v0.2 | 2025-12 | Core整合強化：0.2を責務・基本方針で再構成、0.5を現行BSL章構成と整合、Core参照セクション追加 |
+| v0.2.1 | 2026-01 | Appendix → Annex 命名変更。Normative vs Informative 宣言を追加 |
+| v0.2.2 | 2026-03 | 公開前整合パッチ：Basis を「SSOT を成立させる基準」に統一。表ヘッダ・0.5 節の文言を整合 |
+| v0.2.3 | 2026-03 | 公開前整合パッチ：§0.5 に Running Example（BSL\_1 第10章）への参照を補足 |
 | v0.2.4 | 2026-03 | §0.5 第1章の説明に Running Example（第10章）を追記 |
+| v0.2.5 | 2026-03 | 実装中立化：2.5D固有名を本文から除去し実装層を一般化（§0.1, §0.2.2, §0.4, §0.5, §0.6）。Normative表をリポジトリ体系（between-docs / between-labs）に整合。§0.2.2 をツール固有名除去・退避先統一。§0.2 冒頭の定義文を「中間仕様層」に改め「意味のOS層」を比喩に分離 |
+| v0.2.6 | 2026-04-12 | §0.2.3 を補強。observation judgment update の役割分離を明示し、比較 停止 再開を共有可能な構造として保持するという BSL の基本方針を明確化 |
 
 ---
 
 # BSL_1. Core Concepts（基本概念）
 
-**Version: v0.3.7**
+**Version: v0.3.8**
 
 ---
 
@@ -546,6 +570,8 @@ BSL の責務：
 - 基準が変化する場合、Variant または Design History を経由する
 - Basis の破壊的更新は禁止（append-only もしくは置換の明示手続）
 
+Basis は単なる参照系ではなく、どの差異を背景化しても comparability が保たれるかを含む読み取り基準である。
+
 ---
 
 ## 4. 外側レイヤ：Context / Variant / Design History
@@ -596,15 +622,21 @@ OperationScope は Context 配下に属し、Design History や Operation から
 
 ## 5. Meaning Identity（意味的同一性）
 
-Core 第7章に基づき、BSL では意味的同一性（Identity）を次の3条件で定義する。
+Core 第7章、Core 1.5、および Appendix A.4 に基づき、BSL では意味的同一性（Identity）を、どの構造が、どの基準のもとで一致していれば「同じ」と見なせるかという成立条件として扱う。
+
+Meaning Identity は、次の三つの要素から構成される。
 
 | 条件 | 説明 | Core参照 |
 |------|------|----------|
-| Structure同一性 | Element / Structure の集合と接続関係が一致していること（Flow なら Part/Assembly 構成、Behavior なら Event/Step 構成など） | A.4.1 |
-| Basis同一性 | Basis（Placement / Sequence / Ordering）が同じ意味基準（座標系・順序・並び）を共有していること | A.2.2, A.4.1 |
-| View一致 | Structure × Sidecar を View で読み取った結果として得られる意味が同一であること（表示やフォーマットの差異は許容） | A.4.2 |
+| Structural Identity | Flow／Behavior／Evidence の Structure が、ある View のもとで一致していること。Flow なら Part／Assembly 構成、Behavior なら Event／Step 構成、Evidence なら Reading を意味づける Condition 構造が一致していることを含む | Core 1.5, A.4.1 |
+| Basis Consistency | その一致が、同じ Basis（Placement / Sequence / Ordering）のもとで評価されていること。座標系、手順基準、記録順序の不一致は Identity の破綻として扱う | Core 1.5, A.2.2, A.2.3, A.4.1 |
+| Variation Policy | 宣言された揺れの範囲内で、差異が同一性を壊さないこと | Core 1.5, A.4.2 |
 
-BSL の責務は、これら3条件を **形式仕様として再現できるフォーマット・制約** を定めることである。
+したがって、「同じとは何か」は本体構造だけでは決まらない。本体構造の一致に加えて、どの Basis のもとで読み、どの揺れを許容するかが外在的に定義されてはじめて、Meaning Identity は成立する。
+
+View は Identity の独立した第四条件ではなく、どの構造をどの条件で評価するかを定める読み取り写像である。Sidecar は、その評価に必要な Basis、Condition、Ordering を保持し、Variation Policy はその読み取り条件の上に外在的に宣言される。比較は、常に SSOT と Sidecar に遡って成立条件を確認したうえで、同じ View のもとで行わなければならない。
+
+BSL の責務は、これら三条件を形式仕様として再現できるデータ構造、参照規則、制約として固定することである。すなわち、Structure の比較可能性、Basis の整合性、Variation Policy の機械可読な宣言を、実装が破壊せずに扱えるよう仕様化する。
 
 ---
 
@@ -818,12 +850,15 @@ Flow (A001) ← Behavior (Q001) ← Evidence (R001)
 | 三層 | Element / Structure / Basis |
 | Basis の役割 | 座標系上の基準。実データは Sidecar に外在化され、意味的 SSOT を成立させる基準となる。SSOT 本体そのものではない |
 | 外側レイヤ | Context（OperationScope を含む）/ Variant / Design History |
-| Meaning Identity | Structure同一性 / Basis同一性 / View一致 の3条件 |
+| Meaning Identity | Structural Identity / Basis Consistency / Variation Policy の3条件。View は評価視点を定める読み取り写像であり、独立した条件ではない |
 | 依存ポリシー | Evidence → Behavior → Flow（一方向）、外側レイヤ → 三軸（一方向） |
 | Space | 同一性を評価するための前提が閉じている単位（space_id で識別） |
 | Mapping | Space 間接続（mapping_id / mapping_kind で宣言） |
 | 基本原則 | BP-1〜BP-9 |
 | Running Example | 全章共通の「対象A」を定義 |
+| Comparability | 同一 space_id かつ同一 basis_id の内側で、同じ対象を同じ条件で読めること |
+| Stoppability | 条件が閉じないときに、reason 付きで hold / blocked / non-comparable を返せること |
+| Resumability | trace_id、basis、handoff、continuity により、別主体が同じ前提から安全に再開できること |
 
 本章が整うことで、BSL 全体が「Between Core の意味座標系を破壊しない仕様レイヤ」として機能することを保証する。
 
@@ -843,6 +878,7 @@ Flow (A001) ← Behavior (Q001) ← Evidence (R001)
 | v0.3.5 | 2026-03 | 公開前整合パッチ：§2.1–2.3 Basis 説明列を「SSOT を成立させる基準層」に統一（appendix A.2.3 との整合） |
 | v0.3.6 | 2026-03 | 公開前整合パッチ：§6.1 Evidence→Flow を Core A.3.1 に一致（○）。§6.3 簡略表現との関係を注記 |
 | v0.3.7 | 2026-03 | §10.4 の Ordering 例を BSL_4 スキーマ語彙に整合（sequence → sequence_number / previous_ordering_id） |
+| v0.3.8 | 2026-04 | Core 1.5 整合パッチ：§5 Meaning Identity を Structural Identity / Basis Consistency / Variation Policy の三条件に整理し、View を独立条件ではなく読み取り写像として明確化。Summary の Meaning Identity 行も同内容に整合 |
 
 # BSL_2. Flow 仕様
 
@@ -2419,7 +2455,7 @@ BSL は、SSOT/view の変更が証跡により説明可能であることを要
 
 # BSL_5. Variant 仕様
 
-**Version: v0.2.2**
+**Version: v0.2.3**
 
 ---
 
@@ -2486,6 +2522,9 @@ Variantは外側レイヤに属し、三軸（Flow / Behavior / Evidence）を�
 | 役割 | 選択肢の構造を定義 | 同一性を壊さない揺れを許容 |
 | 対象 | 明示的な分岐（A or B） | 暗黙的な許容（±0.1mm） |
 | 表現 | Option / Binding / Rule | Variation Policy |
+
+注記：
+Variation Policy は Variant ではない。Variation Policy は Meaning Identity の第三条件として、宣言された揺れの範囲内で差分が同一性を壊さないことを定める外在的な条件であり、Sidecar 上に保持される。これに対して Variant は、Option / Binding / Rule によって明示的な選択肢分岐を表す外側レイヤの構造である。
 
 ---
 
@@ -2934,6 +2973,7 @@ Variant関連のIDは以下の接頭辞を使用する。
 | v0.2 | 2025-06 | Core参照ブロック追加、JSON Schema形式化、IDスキーム整理、思想成分排除 |
 | v0.2.1 | 2026-03 | 公開前の用語整合パッチを適用 |
 | v0.2.2 | 2026-03 | 公開前整合パッチ：Core Dependency 表の依存ポリシー記述を Core A.3.1 参照に修正 |
+| v0.2.3 | 2026-04 | BSL_1 §5 整合パッチ：Variation Policy の位置づけを Meaning Identity の第三条件として明確化し、Variant との差異を注記追加 |
 
 # BSL_6. Design History 仕様
 
@@ -5566,7 +5606,7 @@ Slot.id は実装層が自由に決定する（ハッシュ推奨）。BSLはSlo
 
 # BSL Glossary
 
-**Version:** v0.5.1
+**Version: v0.5.3**
 
 ## Scope / SSOT Declaration
 
@@ -5710,6 +5750,33 @@ Core 概念の定義は between/（Core Glossary および Core 本文）を参�
 - Depends on (Core): Sidecar（append-only）
 - Status: active
 
+### Meaning Identity
+
+- Scope: BSL
+- Definition: Core の Meaning Identity を、BSL で比較条件として参照するための入口語。BSL では Structural Identity / Basis Consistency / Variation Policy の三条件を前提に扱う。
+- Spec ref (BSL): Chapter 1. Core Concepts / 5. Meaning Identity
+- Depends on (Core): Meaning Identity, Variation, View, Sidecar
+- Notes: View は独立した第四条件ではなく、Structure と Sidecar をどの視点で評価するかを定める読み取り写像として扱う。
+- Status: active
+
+### View
+
+- Scope: BSL
+- Definition: Structure と Sidecar を参照して Meaning を射影する読み取り写像。BSL では本体を変更せず、比較や再構成の評価視点を定める。
+- Spec ref (BSL): Chapter 1. Core Concepts / 7.1 View
+- Depends on (Core): View, Basis, Sidecar
+- Notes: View は Meaning Identity の独立条件ではなく、同一性評価の視点を与える。比較は同じ View のもとで行う。
+- Status: active
+
+### Sidecar
+
+- Scope: BSL
+- Definition: Basis / Condition / Ordering を本体構造の外側に保持する非侵襲的な履歴領域。BSL では append-only の原則に従い、読み取り条件と再構成条件を外在化する。
+- Spec ref (BSL): Chapter 1. Core Concepts / 7.2 Sidecar
+- Depends on (Core): Sidecar, Basis, Condition, Ordering
+- Notes: SSOT 本体に Basis や Condition を混在させず、比較・再現に必要な条件を保持する。Variation Policy の格納先としても参照される。
+- Status: active
+
 ### Space
 
 - Scope: BSL
@@ -5752,6 +5819,33 @@ Core 概念の定義は between/（Core Glossary および Core 本文）を参�
 - Depends on (Core): Evidence, Sidecar
 - Status: active
 
+### comparability
+
+- Scope: BSL
+- Definition: 同一 space_id かつ同一 basis_id のもとで、同じ対象を同じ条件で読めており、比較が意味を持つ状態。
+- Spec ref (BSL): Chapter 1 Summary
+- Depends on (Core): Meaning Identity, Basis Consistency
+- Notes: 見かけ上の差分ではなく、何を一定に保ったまま何が変わったかを言えることを含む。比較は comparability が成立している場合にのみ許可される。
+- Status: active
+
+### stoppability
+
+- Scope: BSL
+- Definition: 条件が閉じていない、または比較が成立しないときに、処理を reason 付きで停止できる性質。
+- Spec ref (BSL): Chapter 1 Summary
+- Depends on (Core): Evidence, Sidecar
+- Notes: 停止は例外的失敗ではなく、共有地盤を壊さないための正規動作として扱う。hold、blocked、non-comparable などの運用語彙との接続は Shell 側で与える。
+- Status: active
+
+### resumability
+
+- Scope: BSL
+- Definition: 別の主体が、どこまで進み、どの基準のもとで進み、どこから再開できるかを共有可能な形で辿れる性質。
+- Spec ref (BSL): Chapter 1 Summary, Chapter 8 Continuity
+- Depends on (Core): Evidence, Sidecar, Basis
+- Notes: これは記憶力ではなく、externalized basis と trace により支えられる。BSL_8 Continuity は、この resumability を情報構造として支える。
+- Status: active
+
 ### artifact_role
 
 - Scope: BSL
@@ -5775,7 +5869,7 @@ Core 概念の定義は between/（Core Glossary および Core 本文）を参�
 - Definition: 特定の operation を特定の Space で成立させるために必要な前提の束。最小構成は OperationScope + EvalFrame Φ + RequiredEvidence + EffectDeclaration。
 - Spec ref (BSL): Chapter 9. Architecture / 6.3（effect_declaration）、Annex C（Curry–Howard Correspondence）
 - Depends on (Core): DEF-Contract、DEF-Φ、AX-8
-- Notes: Context は判断の前提条件全体を含み、Contract は Context のうち当該 operation の成立に必要な部分だけを射影したもの（Context ⊃ Contract）。
+- Notes: Context は判断の前提条件全体を含み、Contract は Context のうち当該 operation の成立に必要な部分だけを射影したもの（Context ⊃ Contract）。Contract は、この粒度とこの読みの下で、なお比較と継続を許容してよい範囲を宣言する。
 - Status: active
 
 ### effect_declaration
@@ -5839,3 +5933,5 @@ BSL は以下の Core 公理・定義・補題を前提とする。
 | v0.4 | 2026-01 | ToolCall/ToolEffect（Alias）を追加。Reading Notes を更新。References（related policies）セクションを追加 |
 | v0.5 | 2026-01 | Contract / effect_declaration / undefined_type を追加。Core Formal Foundations に DEF-Φ / DEF-Contract / AX-8 を追加 |
 | v0.5.1 | 2026-03 | 公開前の用語整合パッチを適用 |
+| v0.5.2 | 2026-04 | BSL_1 §5 整合パッチに追従し、Glossary に Meaning Identity / View / Sidecar の参照エントリを追加 |
+| v0.5.3 | 2026-04-12 | comparability / stoppability / resumability を追加。比較 停止 再開の説明語彙を整備し、Contract の注記を補って、比較と継続を許容する範囲としての読みを明確化 |

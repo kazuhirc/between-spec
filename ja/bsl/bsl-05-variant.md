@@ -1,6 +1,6 @@
 # BSL_5. Variant 仕様
 
-**Version: v0.2.2**
+**Version: v0.2.3**
 
 ---
 
@@ -67,6 +67,9 @@ Variantは外側レイヤに属し、三軸（Flow / Behavior / Evidence）を�
 | 役割 | 選択肢の構造を定義 | 同一性を壊さない揺れを許容 |
 | 対象 | 明示的な分岐（A or B） | 暗黙的な許容（±0.1mm） |
 | 表現 | Option / Binding / Rule | Variation Policy |
+
+注記：
+Variation Policy は Variant ではない。Variation Policy は Meaning Identity の第三条件として、宣言された揺れの範囲内で差分が同一性を壊さないことを定める外在的な条件であり、Sidecar 上に保持される。これに対して Variant は、Option / Binding / Rule によって明示的な選択肢分岐を表す外側レイヤの構造である。
 
 ---
 
@@ -515,3 +518,4 @@ Variant関連のIDは以下の接頭辞を使用する。
 | v0.2 | 2025-06 | Core参照ブロック追加、JSON Schema形式化、IDスキーム整理、思想成分排除 |
 | v0.2.1 | 2026-03 | 公開前の用語整合パッチを適用 |
 | v0.2.2 | 2026-03 | 公開前整合パッチ：Core Dependency 表の依存ポリシー記述を Core A.3.1 参照に修正 |
+| v0.2.3 | 2026-04 | BSL_1 §5 整合パッチ：Variation Policy の位置づけを Meaning Identity の第三条件として明確化し、Variant との差異を注記追加 |

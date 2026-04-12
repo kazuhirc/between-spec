@@ -1,6 +1,6 @@
 # BSL Glossary
 
-**Version:** v0.5.1
+**Version: v0.5.3**
 
 ## Scope / SSOT Declaration
 
@@ -144,6 +144,33 @@ Core 概念の定義は between/（Core Glossary および Core 本文）を参�
 - Depends on (Core): Sidecar（append-only）
 - Status: active
 
+### Meaning Identity
+
+- Scope: BSL
+- Definition: Core の Meaning Identity を、BSL で比較条件として参照するための入口語。BSL では Structural Identity / Basis Consistency / Variation Policy の三条件を前提に扱う。
+- Spec ref (BSL): Chapter 1. Core Concepts / 5. Meaning Identity
+- Depends on (Core): Meaning Identity, Variation, View, Sidecar
+- Notes: View は独立した第四条件ではなく、Structure と Sidecar をどの視点で評価するかを定める読み取り写像として扱う。
+- Status: active
+
+### View
+
+- Scope: BSL
+- Definition: Structure と Sidecar を参照して Meaning を射影する読み取り写像。BSL では本体を変更せず、比較や再構成の評価視点を定める。
+- Spec ref (BSL): Chapter 1. Core Concepts / 7.1 View
+- Depends on (Core): View, Basis, Sidecar
+- Notes: View は Meaning Identity の独立条件ではなく、同一性評価の視点を与える。比較は同じ View のもとで行う。
+- Status: active
+
+### Sidecar
+
+- Scope: BSL
+- Definition: Basis / Condition / Ordering を本体構造の外側に保持する非侵襲的な履歴領域。BSL では append-only の原則に従い、読み取り条件と再構成条件を外在化する。
+- Spec ref (BSL): Chapter 1. Core Concepts / 7.2 Sidecar
+- Depends on (Core): Sidecar, Basis, Condition, Ordering
+- Notes: SSOT 本体に Basis や Condition を混在させず、比較・再現に必要な条件を保持する。Variation Policy の格納先としても参照される。
+- Status: active
+
 ### Space
 
 - Scope: BSL
@@ -186,6 +213,33 @@ Core 概念の定義は between/（Core Glossary および Core 本文）を参�
 - Depends on (Core): Evidence, Sidecar
 - Status: active
 
+### comparability
+
+- Scope: BSL
+- Definition: 同一 space_id かつ同一 basis_id のもとで、同じ対象を同じ条件で読めており、比較が意味を持つ状態。
+- Spec ref (BSL): Chapter 1 Summary
+- Depends on (Core): Meaning Identity, Basis Consistency
+- Notes: 見かけ上の差分ではなく、何を一定に保ったまま何が変わったかを言えることを含む。比較は comparability が成立している場合にのみ許可される。
+- Status: active
+
+### stoppability
+
+- Scope: BSL
+- Definition: 条件が閉じていない、または比較が成立しないときに、処理を reason 付きで停止できる性質。
+- Spec ref (BSL): Chapter 1 Summary
+- Depends on (Core): Evidence, Sidecar
+- Notes: 停止は例外的失敗ではなく、共有地盤を壊さないための正規動作として扱う。hold、blocked、non-comparable などの運用語彙との接続は Shell 側で与える。
+- Status: active
+
+### resumability
+
+- Scope: BSL
+- Definition: 別の主体が、どこまで進み、どの基準のもとで進み、どこから再開できるかを共有可能な形で辿れる性質。
+- Spec ref (BSL): Chapter 1 Summary, Chapter 8 Continuity
+- Depends on (Core): Evidence, Sidecar, Basis
+- Notes: これは記憶力ではなく、externalized basis と trace により支えられる。BSL_8 Continuity は、この resumability を情報構造として支える。
+- Status: active
+
 ### artifact_role
 
 - Scope: BSL
@@ -209,7 +263,7 @@ Core 概念の定義は between/（Core Glossary および Core 本文）を参�
 - Definition: 特定の operation を特定の Space で成立させるために必要な前提の束。最小構成は OperationScope + EvalFrame Φ + RequiredEvidence + EffectDeclaration。
 - Spec ref (BSL): Chapter 9. Architecture / 6.3（effect_declaration）、Annex C（Curry–Howard Correspondence）
 - Depends on (Core): DEF-Contract、DEF-Φ、AX-8
-- Notes: Context は判断の前提条件全体を含み、Contract は Context のうち当該 operation の成立に必要な部分だけを射影したもの（Context ⊃ Contract）。
+- Notes: Context は判断の前提条件全体を含み、Contract は Context のうち当該 operation の成立に必要な部分だけを射影したもの（Context ⊃ Contract）。Contract は、この粒度とこの読みの下で、なお比較と継続を許容してよい範囲を宣言する。
 - Status: active
 
 ### effect_declaration
@@ -273,3 +327,5 @@ BSL は以下の Core 公理・定義・補題を前提とする。
 | v0.4 | 2026-01 | ToolCall/ToolEffect（Alias）を追加。Reading Notes を更新。References（related policies）セクションを追加 |
 | v0.5 | 2026-01 | Contract / effect_declaration / undefined_type を追加。Core Formal Foundations に DEF-Φ / DEF-Contract / AX-8 を追加 |
 | v0.5.1 | 2026-03 | 公開前の用語整合パッチを適用 |
+| v0.5.2 | 2026-04 | BSL_1 §5 整合パッチに追従し、Glossary に Meaning Identity / View / Sidecar の参照エントリを追加 |
+| v0.5.3 | 2026-04-12 | comparability / stoppability / resumability を追加。比較 停止 再開の説明語彙を整備し、Contract の注記を補って、比較と継続を許容する範囲としての読みを明確化 |
